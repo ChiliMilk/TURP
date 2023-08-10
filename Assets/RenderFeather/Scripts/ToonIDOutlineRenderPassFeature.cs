@@ -49,6 +49,7 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
     /// <inheritdoc/>
     public override void Create()
     {
+        m_ScriptablePass?.Dispose();
         m_ScriptablePass = new CustomRenderPass();
 
         // Configures where the render pass should be injected.

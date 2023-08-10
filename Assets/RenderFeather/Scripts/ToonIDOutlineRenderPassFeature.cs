@@ -6,8 +6,8 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
 {
     class CustomRenderPass : ScriptableRenderPass
     {
-        private static int ToonIDOutlineTextureID = Shader.PropertyToID("_ToonIDOutlineTexture");
         public Material material;
+        private RTHandle ToonIDOutlineHandle;
 
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
@@ -17,7 +17,8 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
         public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
         {
             RenderTextureDescriptor renderTextureDescriptor = renderingData.cameraData.cameraTargetDescriptor;
-            cmd.GetTemporaryRT(ToonIDOutlineTextureID, renderTextureDescriptor);
+            renderTextureDescriptor.depthBufferBits = 0;
+            RenderingUtils.ReAllocateIfNeeded(ref ToonIDOutlineHandle, renderTextureDescriptor);
         }
 
         // Here you can implement the rendering logic.
@@ -28,18 +29,17 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
         {
             CommandBuffer cmd = CommandBufferPool.Get("ToonIDOutline");
 
-            cmd.Blit(renderingData.cameraData.renderer.cameraColorTargetHandle.nameID, ToonIDOutlineTextureID, material);
-            cmd.Blit(ToonIDOutlineTextureID, renderingData.cameraData.renderer.cameraColorTargetHandle.nameID, material);
+            cmd.Blit(renderingData.cameraData.renderer.cameraColorTargetHandle, ToonIDOutlineHandle, material);
+            cmd.Blit(ToonIDOutlineHandle, renderingData.cameraData.renderer.cameraColorTargetHandle);
 
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();
             CommandBufferPool.Release(cmd);
         }
 
-        // Cleanup any allocated resources that were created during the execution of this render pass.
-        public override void OnCameraCleanup(CommandBuffer cmd)
+        public void Dispose()
         {
-            cmd.ReleaseTemporaryRT(ToonIDOutlineTextureID);
+            ToonIDOutlineHandle?.Release();
         }
     }
 
@@ -61,6 +61,11 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         renderer.EnqueuePass(m_ScriptablePass);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        m_ScriptablePass.Dispose();
     }
 }
 

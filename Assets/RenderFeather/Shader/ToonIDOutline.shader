@@ -2,7 +2,7 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
 {
     Properties
     {
-        _MainTex("Texture", 2D) = "white" {}
+        //_MainTex("Texture", 2D) = "white" {}
         _OutlineColor("OutlineColor", Color) = (0.0, 0.0, 0.0, 0.0)
         _OutlineBlend("OutlineBlend", Range(0.0, 1.0)) = 0.5
         _OutlineWidth("OutlineWidth", Float) = 1.0
@@ -19,13 +19,16 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ToonShadingCommon.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
-            #pragma vertex vert
+            #pragma vertex Vert
             #pragma fragment frag
 
-            TEXTURE2D(_MainTex);
+            /*TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
-            float4 _MainTex_TexelSize;
+            float4 _MainTex_TexelSize;*/
+
+            float4 _BlitTexture_TexelSize;
 
             TEXTURE2D_X(_CameraDepthTexture);
 
@@ -35,7 +38,7 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
             half _OutlineMaxDistance;
             half _OutlineMinDistance;
 
-            struct Attributes
+            /*struct Attributes
             {
                 float4 positionOS : POSITION;
                 float2 texcoord : TEXCOORD0;
@@ -44,27 +47,27 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
+                float2 texcoord : TEXCOORD0;
             };
 
-            Varyings vert(Attributes input)
+            Varyings Vert(Attributes input)
             {
                 Varyings output = (Varyings)0;
 
                 VertexPositionInputs vertexInput = GetVertexPositionInputs(input.positionOS.xyz);
                 output.positionCS = vertexInput.positionCS;
 
-                output.uv = input.texcoord;
+                output.texcoord = input.texcoord;
                 return output;
-            }
+            }*/
 
             half4 frag(Varyings input) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
-                float2 Offset = _MainTex_TexelSize.xy * _OutlineWidth;
+                half4 color = SAMPLE_TEXTURE2D(_BlitTexture, sampler_PointClamp, input.texcoord);
+                float2 Offset = _BlitTexture_TexelSize.xy * _OutlineWidth;
 
-                float depth = SAMPLE_TEXTURE2D_X_LOD(_CameraDepthTexture, sampler_ToonDepthTexture_Point_Clamp, input.uv, 0).x;
-                float toonDepth = SAMPLE_TEXTURE2D_X_LOD(_ToonDepthTexture, sampler_ToonDepthTexture_Point_Clamp, input.uv, 0).x;
+                float depth = SAMPLE_TEXTURE2D_X_LOD(_CameraDepthTexture, sampler_ToonDepthTexture_Point_Clamp, input.texcoord, 0).x;
+                float toonDepth = SAMPLE_TEXTURE2D_X_LOD(_ToonDepthTexture, sampler_ToonDepthTexture_Point_Clamp, input.texcoord, 0).x;
                 float linearEyeDepth = LinearEyeDepth(depth, _ZBufferParams);
                 float toonLinearEyeDepth = LinearEyeDepth(toonDepth, _ZBufferParams);
                 //float sobelX = 0.0;
@@ -72,15 +75,15 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
                 float outlineFactor = 0.0;
                 [branch] if (toonLinearEyeDepth - linearEyeDepth < 0.01)
                 {
-                    float center = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv, 0).x * 255;
-                    float lb = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(-1.0, -1.0) * Offset, 0).x * 255.0;
-                    float l = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(-1.0, 0.0) * Offset, 0).x * 255.0;
-                    float lt = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(-1.0, 1.0) * Offset, 0).x * 255.0;
-                    float rt = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(1.0, 1.0) * Offset, 0).x * 255.0;
-                    float r = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(1.0, 0.0) * Offset, 0).x * 255.0;
-                    float rb = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(1.0, -1.0) * Offset, 0).x * 255.0;
-                    float t = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(0.0, 1.0) * Offset, 0).x * 255.0;
-                    float b = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.uv + float2(0.0, -1.0) * Offset, 0).x * 255.0;
+                    float center = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord, 0).x * 255;
+                    float lb = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(-1.0, -1.0) * Offset, 0).x * 255.0;
+                    float l = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(-1.0, 0.0) * Offset, 0).x * 255.0;
+                    float lt = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(-1.0, 1.0) * Offset, 0).x * 255.0;
+                    float rt = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(1.0, 1.0) * Offset, 0).x * 255.0;
+                    float r = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(1.0, 0.0) * Offset, 0).x * 255.0;
+                    float rb = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(1.0, -1.0) * Offset, 0).x * 255.0;
+                    float t = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(0.0, 1.0) * Offset, 0).x * 255.0;
+                    float b = SAMPLE_TEXTURE2D_X_LOD(_ToonDataTexture, sampler_ToonDataTexture_Point_Clamp, input.texcoord + float2(0.0, -1.0) * Offset, 0).x * 255.0;
 
                     outlineFactor = max(outlineFactor, abs(center - lb));
                     outlineFactor = max(outlineFactor, abs(center - l));

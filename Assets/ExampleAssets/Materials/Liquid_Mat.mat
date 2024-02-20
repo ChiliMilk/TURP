@@ -149,7 +149,7 @@ Material:
     - _ToonDepth: 0
     - _ToonDepthShadowEnable: 0
     - _ToonDiffuseRamp: 0.25
-    - _ToonDiffuseRampV: 0.25
+    - _ToonDiffuseRampV: 0.35
     - _ToonID: 0
     - _ToonMatCapUVScale: 0
     - _ToonOnePosShadowEnable: 0

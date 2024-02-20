@@ -14,7 +14,7 @@ public class ToonIDOutlineRenderPassFeature : ScriptableRendererFeature
             CommandBuffer cmd = CommandBufferPool.Get("ToonIDOutline");
 
             RTHandle source = renderingData.cameraData.renderer.cameraColorTargetHandle;
-            Blitter.BlitCameraTexture(cmd, source, source, material, 0);
+            Blitter.BlitCameraTexture(cmd, source, source, RenderBufferLoadAction.DontCare, RenderBufferStoreAction.Store, material, 0);
 
             context.ExecuteCommandBuffer(cmd);
             cmd.Clear();

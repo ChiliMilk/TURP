@@ -9,13 +9,18 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
         _OutlineMinDistance("OutlineMinDistance", Float) = 1
         _OutlineMaxDistance("OutlineMaxDistance", Float) = 100
     }
-        SubShader
+    SubShader
     {
         Tags { "RenderType" = "Opaque" }
-        LOD 100
+
+        Cull Off
+        ZWrite Off
+        ZTest Always
 
         Pass
         {
+            Blend One SrcAlpha
+
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/ToonShadingCommon.hlsl"
@@ -24,15 +29,11 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
             #pragma vertex Vert
             #pragma fragment frag
 
-            /*TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-            float4 _MainTex_TexelSize;*/
-
             float4 _BlitTexture_TexelSize;
 
             TEXTURE2D_X(_CameraDepthTexture);
 
-            half4 _OutlineColor;
+            half3 _OutlineColor;
             float _OutlineWidth;
             float _OutlineBlend;
             half _OutlineMaxDistance;
@@ -63,7 +64,7 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
 
             half4 frag(Varyings input) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_BlitTexture, sampler_PointClamp, input.texcoord);
+                //half3 color = SAMPLE_TEXTURE2D(_BlitTexture, sampler_PointClamp, input.texcoord).rgb;
                 float2 Offset = _BlitTexture_TexelSize.xy * _OutlineWidth;
 
                 float depth = SAMPLE_TEXTURE2D_X_LOD(_CameraDepthTexture, sampler_ToonDepthTexture_Point_Clamp, input.texcoord, 0).x;
@@ -98,10 +99,10 @@ Shader "ToonShding/RenderFeature/ToonIDOutlinePP"
                 }
                 outlineFactor = saturate(outlineFactor);
                 outlineFactor *= 1- saturate((linearEyeDepth - _OutlineMinDistance) / _OutlineMaxDistance);
-                half4 outlineColor = lerp(_OutlineColor, color, _OutlineBlend);
-                float4 finalColor = lerp(color, outlineColor, outlineFactor);
+                //half3 outlineColor = lerp(color, _OutlineColor, _OutlineBlend);
+                //float4 finalColor = lerp(color, outlineColor, outlineFactor);
 
-                return finalColor;
+                return float4(_OutlineColor * _OutlineBlend * outlineFactor, 1.0 - _OutlineBlend * outlineFactor);
             }
             ENDHLSL
         }

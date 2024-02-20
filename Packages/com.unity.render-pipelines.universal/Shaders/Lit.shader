@@ -45,7 +45,7 @@ Shader "Universal Render Pipeline/Lit"
         [HideInInspector] _ClearCoatSmoothness("_ClearCoatSmoothness", Float) = 0.0
 
         //ToonShading
-        _ToonDiffuseRampV("ToonDiffuseRampV", Range(0.0, 1.0)) = 0.25
+        _ToonDiffuseRampV("ToonDiffuseRampV", Range(0.0, 1.0)) = 0.35
         _ToonSpecularFeather("ToonSpecularFeather", Range(0.0, 1.0)) = 1.0
 
         [ToggleOff]_ToonOutlineEnable("ToonOutlineEnable",Float) = 0

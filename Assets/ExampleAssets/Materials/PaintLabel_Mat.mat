@@ -28,10 +28,12 @@ Material:
   - _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_InvalidKeywords:
   - _TOONDATA_OFF
+  - _TOONDEPTHSHADOWENABLE_OFF
   - _TOONDEPTH_OFF
   - _TOONOUTLINEENABLE_OFF
   - _TOONOUTLINESMOOTHNORMAL_OFF
   - _TOONOUTLINEWIDTHCOLORR_OFF
+  - _TOONPOINTSHADOWENABLE_OFF
   - _TOONRENDERINFORWARDONLY_OFF
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -92,6 +94,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ToonMatCapMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -138,11 +144,15 @@ Material:
     - _Surface: 0
     - _ToonData: 0
     - _ToonDepth: 0
-    - _ToonDiffuseRampV: 0.25
+    - _ToonDepthShadowEnable: 0
+    - _ToonDiffuseRampV: 0.35
+    - _ToonID: 0
+    - _ToonMatCapUVScale: 0
     - _ToonOutlineEnable: 0
     - _ToonOutlineSmoothNormal: 0
     - _ToonOutlineWidth: 0.5
     - _ToonOutlineWidthColorR: 0
+    - _ToonPointShadowEnable: 0
     - _ToonRenderInForwardOnly: 0
     - _ToonSpecularFeather: 1
     - _UVSec: 0
@@ -154,6 +164,7 @@ Material:
     - _Color: {r: 0.9433962, g: 0.9433962, b: 0.9433962, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _ToonMatCapColor: {r: 0, g: 0, b: 0, a: 0}
     - _ToonOnePosShadowPosition: {r: 0, g: 0, b: 0, a: 0}
     - _ToonOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _ToonPointShadowPosition: {r: 0, g: 0, b: 0, a: 0}

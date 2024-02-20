@@ -127,7 +127,7 @@ half3 LightingToonLit(BRDFData brdfData, ToonData toonData, Light light, half3 n
     radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation * depthShadow, toonData.toonDiffuseRampV), 0) * light.distanceAttenuation;
     specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation * depthShadow;
 #else
-    radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation, 0.0), 0) * light.distanceAttenuation;
+    radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation, frac(toonData.toonDiffuseRampV * 10) * 0.1), 0) * light.distanceAttenuation;
     specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation;
 #endif
     half3 toonColor = brdfData.diffuse * radiance;
@@ -155,7 +155,7 @@ half3 LightingToonSimpleLit(SurfaceData surfaceData, ToonData toonData, Light li
     radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation * toonData.toonStaticShadow * depthShadow + ToonDiffuseOffset, toonData.toonDiffuseRampV), 0) * light.distanceAttenuation;
     specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation * toonData.toonStaticShadow * depthShadow;
 #else
-    radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation* toonData.toonStaticShadow + ToonDiffuseOffset, 0.0), 0) * light.distanceAttenuation;
+    radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation* toonData.toonStaticShadow + ToonDiffuseOffset, frac(toonData.toonDiffuseRampV * 10) * 0.1), 0) * light.distanceAttenuation; //10 RampColor, sample first one. 
     specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation * toonData.toonStaticShadow;
 #endif
     half3 toonColor = surfaceData.albedo * radiance;
@@ -179,7 +179,7 @@ half3 LightingToonForwardLit(BRDFData brdfData, ToonData toonData, Light light, 
     }
     else
     {
-        radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation, 0.0), 0) * light.distanceAttenuation;
+        radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation, frac(toonData.toonDiffuseRampV * 10) * 0.1), 0) * light.distanceAttenuation;
         specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation;
     }
     half3 toonColor = brdfData.diffuse * radiance;
@@ -211,7 +211,7 @@ half3 LightingToonForwardSimpleLit(SurfaceData surfaceData, ToonData toonData, L
     }
     else
     {
-        radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation * toonData.toonStaticShadow + ToonDiffuseOffset, 0.0), 0) * light.distanceAttenuation;
+        radiance = SAMPLE_TEXTURE2D_X_LOD(_ToonDiffuseRamp, sampler_ToonDiffuseRamp_Point_Clamp, half2(NdotL_Half * light.shadowAttenuation * toonData.toonStaticShadow + ToonDiffuseOffset, frac(toonData.toonDiffuseRampV * 10) * 0.1), 0) * light.distanceAttenuation;
         specRadiance = saturate(NdotL) * light.shadowAttenuation * light.distanceAttenuation * toonData.toonStaticShadow;
     }
     half3 toonColor = surfaceData.albedo * radiance;

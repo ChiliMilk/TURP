@@ -36,7 +36,7 @@ Shader "Universal Render Pipeline/Simple Lit"
 
         //ToonShading
         _ToonSpecularIntensity("ToonSpecularIntensity", Range(0.0, 1.0)) = 0.0
-        _ToonDiffuseRampV("ToonDiffuseRampV", Range(0.0, 1.0)) = 0.25
+        _ToonDiffuseRampV("ToonDiffuseRampV", Range(0.0, 1.0)) = 0.35
         _ToonDiffuseRampOffset("ToonDiffuseRampOffset", Range(-1.0, 1.0)) = 0.0
 
         [ToggleOff]_ToonOutlineEnable("ToonOutlineEnable",Float) = 0

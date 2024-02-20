@@ -146,7 +146,7 @@ Material:
     - _ToonDepthShadowEnable: 1
     - _ToonDepthShadowOffset: 10
     - _ToonDiffuseRampOffset: 0
-    - _ToonDiffuseRampV: 0.25
+    - _ToonDiffuseRampV: 0.48
     - _ToonID: 5
     - _ToonMatCapUVScale: 0
     - _ToonOutlineEnable: 1

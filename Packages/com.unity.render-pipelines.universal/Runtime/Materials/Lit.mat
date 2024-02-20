@@ -27,6 +27,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _TOONDATA_OFF
+  - _TOONDEPTHSHADOWENABLE_OFF
   - _TOONOUTLINEENABLE_OFF
   - _TOONOUTLINESMOOTHNORMAL_OFF
   - _TOONOUTLINEWIDTHCOLORR_OFF
@@ -102,6 +103,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ToonMatCapMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ToonSDFShadowMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -153,7 +158,7 @@ Material:
     - _ReceiveShadows: 1
     - _ReflectionSource: 0
     - _Shininess: 1
-    - _Smoothness: 0.525
+    - _Smoothness: 0
     - _SmoothnessSource: 0
     - _SmoothnessTextureChannel: 0
     - _SpecSource: 0
@@ -163,10 +168,12 @@ Material:
     - _Surface: 0
     - _ToonData: 0
     - _ToonDepth: 0
+    - _ToonDepthShadowEnable: 0
     - _ToonDepthShadowOffset: 0
     - _ToonDiffuseRampOffset: 0
-    - _ToonDiffuseRampV: 0.217
+    - _ToonDiffuseRampV: 0
     - _ToonID: 0
+    - _ToonMatCapUVScale: 0
     - _ToonOutlineEnable: 0
     - _ToonOutlineSmoothNormal: 0
     - _ToonOutlineWidth: 0.5
@@ -174,16 +181,17 @@ Material:
     - _ToonPointShadowEnable: 0
     - _ToonRenderInForwardOnly: 0
     - _ToonSDFShadowEnable: 0
-    - _ToonSpecularFeather: 0
+    - _ToonSpecularFeather: 1
     - _UVSec: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
-    - _Color: {r: 0.7924528, g: 0.7924528, b: 0.7924528, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ToonMatCapColor: {r: 0, g: 0, b: 0, a: 0}
     - _ToonOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _ToonPointShadowPosition: {r: 0, g: 0, b: 0, a: 0}
     - _ToonSDFShadowLdotFL: {r: 0, g: 0, b: 0, a: 0}
